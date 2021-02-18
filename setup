@@ -1,7 +1,8 @@
-purenetwork eth setattr --servicelist management ct0.eth
+purenetwork eth setattr --servicelist management ct0.eth0 
 purenetwork eth setattr --servicelist iscsi ct0.eth1
 purenetwork eth setattr --servicelist iscsi ct0.eth2
-purenetwork eth setattr --servicelist replication ct0.eth3               
+purenetwork eth setattr --servicelist replication ct0.eth3    
+purenetwork eth setattr --servicelist replication ct0.eth4               
 purenetwork eth setattr --mode static ct0.eth0
 purenetwork eth setattr --address 10.224.114.255 --netmask 255.255.252.0 --gateway 10.224.112.1 ct0.eth0
 purenetwork eth enable ct0.eth0
@@ -9,7 +10,7 @@ purenetwork eth setattr --address 10.10.10.150 --netmask 255.255.255.0 --gateway
 purenetwork eth enable ct0.eth1
 purenetwork eth setattr --mode static ct0.eth2
 purenetwork eth setattr --address 10.10.10.152 --netmask 255.255.255.0 --gateway 10.10.10.1 ct0.eth1
-purenetwork eth enable ct0.eth1
+purenetwork eth enable ct0.eth2
 purenetwork eth setattr --mode static ct0.eth3
 purenetwork eth setattr --address 10.10.12.100 --netmask 255.255.255.0 --gateway 10.10.12.1 ct0.eth3
 purenetwork eth enable ct0.eth3
