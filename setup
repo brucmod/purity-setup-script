@@ -1,0 +1,49 @@
+/opt/Purity/bin/puredb tune --clear
+/opt/Purity/bin/pureadm stop
+rm -f /root/*.bdev
+/opt/Purity/bin/pureadm tune PURITY_TEST 1
+/opt/Purity/bin/pureadm tune PS_PREFER_AIO 1
+/opt/Purity/bin/pureadm tune PS_STORAGE_FILES 1
+/opt/Purity/bin/pureadm tune PS_SSDRESET_NUM_NVRAM 4
+/opt/Purity/bin/pureadm tune PS_SSDRESET_NUM_SSD 20
+/opt/Purity/bin/pureadm tune PS_SSDRESET_NUM_CACHE 0
+/opt/Purity/bin/pureadm tune PS_MAX_DEVICES_OVERRIDE 24
+#/opt/Purity/bin/pureadm tune PS_SSDRESET_NVRAM_SIZE_MB 2048
+/opt/Purity/bin/pureadm tune PS_SSDRESET_SSD_SIZE_MB 6216
+/opt/Purity/bin/pureadm tune PS_STORAGE_CAPACITY_OVERRIDE_GB 200
+/opt/Purity/bin/pureadm tune PS_SYNCREP_ENABLED 1
+/opt/Purity/bin/pureadm lo-mem enable
+/opt/Purity/bin/pureadm stop
+rmmod ps_bdrv
+. /etc/default/purity
+cd /root
+export PS_STORAGE_FILES=1
+reset_apartment -f THIS_IS_BEING_USED_AS_A_PART_OF_TEST_INFRASTRUCTURE_OR_MY_RESUME_IS_UP_TO_DATE
+pureadm start
+sleep 10
+purearray rename FA-1
+purearray setattr --senderdomain puretec.purestorage.com
+puredns setattr --mode=static
+puredns setattr --domain puretec.purestorage.com
+puredns setattr --nameservers 10.224.255.252
+purenetwork eth setattr --servicelist management ct0.eth
+purenetwork eth setattr --servicelist iscsi ct0.eth1
+purenetwork eth setattr --servicelist iscsi ct0.eth2
+purenetwork eth setattr --servicelist replication ct0.eth3               
+purenetwork eth setattr --mode static ct0.eth0
+purenetwork eth setattr --address 10.224.114.255 --netmask 255.255.252.0 --gateway 10.224.112.1 ct0.eth0
+purenetwork enable ct0.eth0
+purenetwork eth setattr --address 10.10.10.150 --netmask 255.255.255.0 --gateway 10.10.10.1 ct0.eth1
+purenetwork enable ct0.eth1
+purenetwork eth setattr --mode static ct0.eth2
+purenetwork eth setattr --address 10.10.10.152 --netmask 255.255.255.0 --gateway 10.10.10.1 ct0.eth1
+purenetwork enable ct0.eth1
+purenetwork eth setattr --mode static ct0.eth3
+purenetwork eth setattr --address 10.10.12.100 --netmask 255.255.255.0 --gateway 10.10.12.1 ct0.eth3
+purenetwork enable ct0.eth3
+purenetwork eth setattr --mode static ct0.eth4
+purenetwork eth setattr --address 10.10.12.200 --netmask 255.255.255.0 --gateway 10.10.12.1 ct0.eth4
+purenetwork enable ct0.eth4
+ 
+ 
+ifconfig | grep 'inet addr:' | grep -v '127.0.0.1' | cut -d: -f2 | awk '{ print "*** Connect your web browser to PurityVM IP Address: " $1}'
